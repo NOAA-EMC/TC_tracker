@@ -1,0 +1,5 @@
+[gfs]
+fname_template = /gpfs/dell1/nco/ops/com/gfs/prod/gfs.{date:%Y%m%d}/{date:%H}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
+# min_fhr = 0
+# max_fhr = 120
+# delta_fhr = 6

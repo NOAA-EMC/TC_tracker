@@ -1,0 +1,97 @@
+#!/bin/ksh --login
+
+#SBATCH --job-name=gfs_tc_track
+#SBATCH --account=fv3-cpu
+#SBATCH --qos=batch
+#SBATCH --ntasks=1
+
+##SBATCH --nodes=66
+##SBATCH --tasks-per-node=20
+##SBATCH --cpus-per-task=2
+
+#SBATCH --time=00:40:00
+#SBATCH --mem=10g
+#SBATCH -o gfs_tc_track.log
+
+#%include <head.h> 
+#%include <envir-p2.h>
+
+export moduleInit=/apps/lmod/lmod/init/ksh
+. $moduleInit
+
+module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+module use /apps/modules/modulefamilies/intel
+module use /apps/modules/modulefamilies/intel_impi
+
+module load intel/18.0.5.274
+module load impi/2019.0.4
+module load nco/4.7.0
+
+module load png/1.2.44
+module load w3emc/2.3.1
+module load w3nco/2.0.6
+module load bacio/2.0.3
+module load g2/3.1.0
+
+module load z/1.2.11
+module load jasper/1.900.1
+module load sigio/2.1.1
+module load sp/2.0.2
+module load ip/2.0.0
+
+#module load netcdf/4.7.0
+#module load pnetcdf/1.10.0
+#module load hdf5/1.10.5
+
+module load wgrib2/2.0.8
+module load prod_util/1.1.0
+module load grib_util/1.1.1
+
+#module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+module load hdf5_parallel/1.12.0
+module load netcdf_parallel/4.7.5
+module load w3emc_para/2.4.0
+
+set -x
+export envir=dev2
+export cyc=00
+export job=gfs_track_${cyc}
+
+export NWROOT=/scratch2/NCEPDEV/ensemble/Jiayi.Peng/noscrub
+export DATAROOT=/scratch2/NCEPDEV/stmp3/Jiayi.Peng
+export COMROOT=/scratch2/NCEPDEV/stmp3/Jiayi.Peng/com2
+export COMROOTp1=/scratch1/NCEPDEV/rstprod/com
+export KEEPDATA=YES
+
+# versions file for tracker $tracker.ver
+VERSION_FILE=${NWROOT}/versions/tracker.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+# CALL executable job script here
+#${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JGFS_TC_TRACK
+${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JFV3_CYCLONE_TRACK_JP
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+#%include <tail.h> 
+#%manual
+######################################################################
+#PURPOSE:  Executes the job that creates GFS TC track forecasts
+######################################################################
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+#%end

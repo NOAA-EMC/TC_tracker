@@ -1,0 +1,72 @@
+#BSUB -J fens_TC_00
+#BSUB -o /ptmpp2/Jiayi.Peng/com2/fens_track_00.o%J 
+#BSUB -e /ptmpp2/Jiayi.Peng/com2/fens_track_00.o%J
+#BSUB -L /bin/sh
+#BSUB -q "dev2"
+#BSUB -W 0:45
+#BSUB -cwd /ptmpp2/Jiayi.Peng/com2
+#BSUB -P GEN-T2O
+##BSUB -R rusage[mem=4000]
+#BSUB -R affinity[core]
+#BSUB -n 21
+#BSUB -R span[ptile=7]
+#BSUB -a poe
+#BSUB -x
+
+#%include <head.h>
+#%include <envir-p2.h>
+module use /nwprod2/modulefiles
+module load prod_envir/v1.0.1
+module load grib_util/v1.0.3
+module load prod_util/v1.0.15
+
+module use /usrx/local/modulefiles
+module load EnvVars/1.0.1
+
+set -x
+export MP_LABELIO=yes
+export MP_STDOUTMODE=unordered
+
+export envir=dev2
+export cyc=00
+export job=fens_track_${cyc}
+#export NWROOT=/nwprod2
+export NWROOT=/ensemble/save/Jiayi.Peng
+
+#export DATAROOT=/tmpnwprd_p2
+export DATAROOT=/ptmpp2/Jiayi.Peng
+
+export COMDATEROOT=/com2
+#export COMROOT=/com2
+export COMROOT=/ptmpp2/Jiayi.Peng/com2
+
+export COMROOTp1=/com
+export DCOMROOT=/dcom
+export KEEPDATA=NO
+
+# versions file for tracker $tracker.ver
+VERSION_FILE=${NWROOT}/versions/tracker.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+# CALL executable job script here
+${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JFENS_TC_TRACK
+
+#%include <tail.h>
+#%manual
+######################################################################
+#PURPOSE:  Executes the job that creates FENS TRACK forecast 
+######################################################################
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+#%end
