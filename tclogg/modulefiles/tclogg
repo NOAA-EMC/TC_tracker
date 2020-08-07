@@ -1,7 +1,0 @@
-#%Module
-
-module-whatis "Sets environment for tclogg tracker"
-module load python/3.6.3
-prepend-path PATH /gpfs/hps3/emc/ensemble/save/Jiayi.Peng/ens_tracker.v1.1.15.4/tclogg/bin
-prepend-path PYTHONPATH /gpfs/hps3/emc/ensemble/save/Jiayi.Peng/ens_tracker.v1.1.15.4/tclogg
-prepend-path PYTHONPATH /usrx/local/prod/python/3.6.3/lib/python3.6
