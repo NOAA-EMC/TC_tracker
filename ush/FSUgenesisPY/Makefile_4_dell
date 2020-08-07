@@ -1,0 +1,6 @@
+all:
+	python make_modulefile_4_dell.py
+
+clean:
+	find .  -name "*.pyc" -o -name "*pycache*"
+	rm -f modulefiles/tclogg

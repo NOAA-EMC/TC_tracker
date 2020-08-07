@@ -1,0 +1,248 @@
+#!/bin/sh 
+date
+export PS4=' $SECONDS + '
+set -x
+
+####################################
+# obtain unique process id (pid) and make temp directory
+####################################
+export jobid=${jobid:-$job.o$$}
+export DATA=${DATA:-${DATAROOT:?}/${jobid}}
+mkdir -p $DATA
+cd $DATA
+export cycle=t${cyc}z
+
+####################################
+# File To Log Msgs
+####################################
+export jlogfile=${jlogfile:-${COMROOT}/logs/jlogfiles/jlogfile.${jobid}}
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${NET:-ens_tracker}
+export RUN=${RUN:-ecme}
+
+####################################
+# Determine Job Output Name on System
+####################################
+export pgmout="OUTPUT.$$"
+export pgmerr=errfile
+
+####################################
+# SENDECF  - Flag Events on ecFLOW
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export SENDDBN=${SENDDBN:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEens_tracker=${HOMEens_tracker:-${NWROOT:?}/ens_tracker.${ens_tracker_ver}}
+export EXECens_tracker=${EXECens_tracker:-$HOMEens_tracker/exec}
+export FIXens_tracker=${FIXens_tracker:-$HOMEens_tracker/fix}
+export USHens_tracker=${USHens_tracker:-$HOMEens_tracker/ush}
+export SCRIPTSens_tracker=${SCRIPTSens_tracker:-$HOMEens_tracker/scripts}
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+setpdy.sh
+. PDY
+
+##############################################
+# Define COM directories
+##############################################
+export DCOM=${DCOM:-${DCOMROOT:?}/us007003/${PDY}/wgrbbul/ecmwf}
+export COMOUT=${COMOUT:-${COMROOT:?}/${NET}/${envir}/${RUN}.${PDY}/${cyc}/pgrba}
+mkdir -m 775 -p $COMOUT
+
+msg="HAS BEGUN on `hostname`"
+postmsg "$jlogfile" "$msg"
+
+env
+
+#############################################################
+# Execute the script
+export EXECecme=${EXECens_tracker} 
+export cmodel=eens
+export eensdcom=${DCOM}
+
+#-----------input data checking -----------------
+${USHens_tracker}/data_check.sh
+# exit code 6 = missing data of opportunity
+if [ $? -eq 6 ]; then exit; fi
+#------------------------------------------------
+#for single cpu run
+#${APRUNTRACK} ${SCRIPTSens_tracker}/exwsr_ecmwfens.sh
+
+#for MPMD runs
+cd ${DATA}
+hrstring="  0   6  12  18  24  30  36  42  48  54
+           60  66  72  78  84  90  96 102 108 114
+          120 126 132 138 144 150 156 162 168 174
+          180 186 192 198 204 210 216 222 228 234 240"
+
+>trkr.cmdfile
+for leadhr in ${hrstring}; do
+  leadhrdir=${DATA}/${leadhr}
+  mkdir -p ${leadhrdir}
+  outfile=${leadhrdir}/ecgrib.${leadhr}.out
+  echo "${SCRIPTSens_tracker}/exwsr_ecmwfens.sh ${leadhrdir} ${leadhr} 2>&1 >${outfile}" >>trkr.cmdfile
+done
+
+chmod u+x trkr.cmdfile
+export MP_PGMMODEL=mpmd
+export MP_CMDFILE=${DATA}/trkr.cmdfile
+
+mac=`echo ${SITE}`
+if [ $mac = TIDE -o $mac = GYRE ] ; then # For WCOSS
+  machine=wcoss
+  mpirun.lsf
+elif [ $mac = LUNA -o $mac = SURGE ] ; then # For CRAY
+  machine=cray
+  ${APRUNTRACK} cfp ${MP_CMDFILE}
+fi
+
+for leadhr in ${hrstring}; do
+  prev_cycle=t${cyc}z
+  leadhrdir=${DATA}/${leadhr}
+
+    if [[ -s ${leadhrdir}/tmpt200 ]]; then
+      cat ${leadhrdir}/tmpt200      >>ensposte.$prev_cycle.t200hr
+      cat ${leadhrdir}/tmpt200stat  >>ensstate.$prev_cycle.t200hr
+    fi
+    if [[ -s ${leadhrdir}/tmpt500 ]]; then
+      cat ${leadhrdir}/tmpt500      >>ensposte.$prev_cycle.t500hr
+      cat ${leadhrdir}/tmpt500stat  >>ensstate.$prev_cycle.t500hr
+    fi
+    if [[ -s ${leadhrdir}/tmpt700 ]]; then
+      cat ${leadhrdir}/tmpt700      >>ensposte.$prev_cycle.t700hr
+      cat ${leadhrdir}/tmpt700stat  >>ensstate.$prev_cycle.t700hr
+    fi
+    if [[ -s ${leadhrdir}/tmpt850 ]]; then
+      cat ${leadhrdir}/tmpt850      >>ensposte.$prev_cycle.t850hr
+      cat ${leadhrdir}/tmpt850stat  >>ensstate.$prev_cycle.t850hr
+    fi
+    if [[ -s ${leadhrdir}/tmpt2m ]]; then
+      cat ${leadhrdir}/tmpt2m       >>ensposte.$prev_cycle.t2mhr
+      cat ${leadhrdir}/tmpt2mstat   >>ensstate.$prev_cycle.t2mhr
+    fi
+    if [[ -s ${leadhrdir}/tmpt2max ]]; then
+      cat ${leadhrdir}/tmpt2max       >>ensposte.$prev_cycle.t2maxhr
+      cat ${leadhrdir}/tmpt2maxstat   >>ensstate.$prev_cycle.t2maxhr
+    fi
+    if [[ -s ${leadhrdir}/tmpt2min ]]; then
+      cat ${leadhrdir}/tmpt2min       >>ensposte.$prev_cycle.t2minhr
+      cat ${leadhrdir}/tmpt2minstat   >>ensstate.$prev_cycle.t2minhr
+    fi
+    if [[ -s ${leadhrdir}/tmptd2m ]]; then
+      cat ${leadhrdir}/tmptd2m       >>ensposte.$prev_cycle.td2mhr
+      cat ${leadhrdir}/tmptd2mstat   >>ensstate.$prev_cycle.td2mhr
+    fi
+
+    if [[ -s ${leadhrdir}/tmpz200 ]]; then
+      cat ${leadhrdir}/tmpz200      >>ensposte.$prev_cycle.z200hr
+      cat ${leadhrdir}/tmpz200stat  >>ensstate.$prev_cycle.z200hr
+    fi
+    if [[ -s ${leadhrdir}/tmpz500 ]]; then
+      cat ${leadhrdir}/tmpz500      >>ensposte.$prev_cycle.z500hr
+      cat ${leadhrdir}/tmpz500stat  >>ensstate.$prev_cycle.z500hr
+    fi
+    if [[ -s ${leadhrdir}/tmpz700 ]]; then
+      cat ${leadhrdir}/tmpz700      >>ensposte.$prev_cycle.z700hr
+      cat ${leadhrdir}/tmpz700stat  >>ensstate.$prev_cycle.z700hr
+    fi
+    if [[ -s ${leadhrdir}/tmpz850 ]]; then
+      cat ${leadhrdir}/tmpz850      >>ensposte.$prev_cycle.z850hr
+      cat ${leadhrdir}/tmpz850stat  >>ensstate.$prev_cycle.z850hr
+    fi
+    if [[ -s ${leadhrdir}/tmpz1000 ]]; then
+      cat ${leadhrdir}/tmpz1000     >>ensposte.$prev_cycle.z1000hr
+      cat ${leadhrdir}/tmpz1000stat >>ensstate.$prev_cycle.z1000hr
+    fi
+
+    if [[ -s ${leadhrdir}/tmprh500 ]]; then
+      cat ${leadhrdir}/tmprh500     >>ensposte.$prev_cycle.rh500hr
+      cat ${leadhrdir}/tmprh500stat >>ensstate.$prev_cycle.rh500hr
+    fi
+    if [[ -s ${leadhrdir}/tmprh700 ]]; then
+      cat ${leadhrdir}/tmprh700     >>ensposte.$prev_cycle.rh700hr
+      cat ${leadhrdir}/tmprh700stat >>ensstate.$prev_cycle.rh700hr
+    fi
+    if [[ -s ${leadhrdir}/tmprh850 ]]; then
+      cat ${leadhrdir}/tmprh850     >>ensposte.$prev_cycle.rh850hr
+      cat ${leadhrdir}/tmprh850stat >>ensstate.$prev_cycle.rh850hr
+    fi
+
+    if [[ -s ${leadhrdir}/tmpmslp ]]; then
+      cat ${leadhrdir}/tmpmslp      >>ensposte.$prev_cycle.mslphr
+      cat ${leadhrdir}/tmpmslpstat  >>ensstate.$prev_cycle.mslphr
+    fi
+    if [[ -s ${leadhrdir}/tmppsfc ]]; then
+      cat ${leadhrdir}/tmppsfc      >>ensposte.$prev_cycle.psfchr
+      cat ${leadhrdir}/tmppsfcstat  >>ensstate.$prev_cycle.psfchr
+    fi
+    if [[ -s ${leadhrdir}/tmpprcp ]]; then
+      cat ${leadhrdir}/tmpprcp      >>ensposte.$prev_cycle.prcphr
+      cat ${leadhrdir}/tmpprcpstat  >>ensstate.$prev_cycle.prcphr
+    fi
+    if [[ -s ${leadhrdir}/tmptcdc ]]; then
+      cat ${leadhrdir}/tmptcdc      >>ensposte.$prev_cycle.tcdchr
+      cat ${leadhrdir}/tmptcdcstat  >>ensstate.$prev_cycle.tcdchr
+    fi
+
+    if [[ -s ${leadhrdir}/tmpu200 ]]; then
+      cat ${leadhrdir}/tmpu200      >>ensposte.$prev_cycle.u200hr
+      cat ${leadhrdir}/tmpv200      >>ensposte.$prev_cycle.v200hr
+    fi
+    if [[ -s ${leadhrdir}/tmpu500 ]]; then
+      cat ${leadhrdir}/tmpu500      >>ensposte.$prev_cycle.u500hr
+      cat ${leadhrdir}/tmpv500      >>ensposte.$prev_cycle.v500hr
+    fi
+    if [[ -s ${leadhrdir}/tmpu700 ]]; then
+      cat ${leadhrdir}/tmpu700      >>ensposte.$prev_cycle.u700hr
+      cat ${leadhrdir}/tmpv700      >>ensposte.$prev_cycle.v700hr
+    fi
+    if [[ -s ${leadhrdir}/tmpu850 ]]; then
+      cat ${leadhrdir}/tmpu850      >>ensposte.$prev_cycle.u850hr
+      cat ${leadhrdir}/tmpv850      >>ensposte.$prev_cycle.v850hr
+    fi
+    if [[ -s ${leadhrdir}/tmpu10m ]]; then
+      cat ${leadhrdir}/tmpu10m      >>ensposte.$prev_cycle.u10mhr
+      cat ${leadhrdir}/tmpv10m      >>ensposte.$prev_cycle.v10mhr
+    fi
+
+done
+
+#############################################################
+for file in ensposte.* ensstate.*
+do
+  ${GRBINDEX:?} ${file} ${file}.i
+done
+
+###################################
+# Copy output (ECMWF ensemble GRIB1) data to $COMOUT
+###################################
+if [ "$SENDCOM" = 'YES' ]; then
+  cp ensposte.* $COMOUT
+  cp ensstate.* $COMOUT
+  #if [ "$SENDDBN" = 'YES' ]; then
+  #  $DBNROOT/bin/dbn_alert EENS GRIB1-Change $job
+  #fi
+fi
+
+msg="JOB COMPLETED NORMALLY"
+postmsg "$jlogfile" "$msg"
+
+##############################
+# Remove the Temporary working directory
+##############################
+if [[ $KEEPDATA != "YES" ]]; then
+  rm -rf $DATA
+fi
+
+date
