@@ -1,0 +1,88 @@
+#!/bin/sh 
+date
+export PS4=' $SECONDS + '
+set -x
+
+####################################
+# obtain unique process id (pid) and make temp directory
+####################################
+export jobid=${jobid:-$job.o$$}
+export DATA=${DATA:-${DATAROOT:?}/${jobid}}
+mkdir -p $DATA
+cd $DATA
+export cycle=t${cyc}z
+
+####################################
+# File To Log Msgs
+####################################
+export jlogfile=${jlogfile:-${COMROOT}/logs/jlogfiles/jlogfile.${jobid}}
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${NET:-ens_tracker}
+export RUN=${RUN:-fens}
+
+####################################
+# Determine Job Output Name on System
+####################################
+export pgmout="OUTPUT.$$"
+export pgmerr=errfile
+
+####################################
+# SENDECF  - Flag Events on ecFLOW
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export SENDDBN=${SENDDBN:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEens_tracker=${HOMEens_tracker:-${NWROOT:?}/ens_tracker.${ens_tracker_ver}}
+export EXECens_tracker=${EXECens_tracker:-$HOMEens_tracker/exec}
+export FIXens_tracker=${FIXens_tracker:-$HOMEens_tracker/fix}
+export USHens_tracker=${USHens_tracker:-$HOMEens_tracker/ush}
+export SCRIPTens_tracker=${SCRIPTens_tracker:-$HOMEens_tracker/scripts}
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+setpdy.sh
+. PDY
+
+##############################################
+# Define COM directories
+##############################################
+export JYYYY=`echo ${PDY} | cut -c1-4`
+export DCOM=${DCOM:-${DCOMROOT:?}/us007003/navgem}
+export COMINgfs=${COMINgfs:-$(compath.py gfs/prod/gfs.$PDY)}
+
+export COMINgenvit=${COMINgenvit:-${GESROOT:?}/${envir}/${NET}/genesis_vital_${JYYYY}}
+export COMINsyn=${COMINsyn:-$(compath.py arch/prod/syndat)}
+
+export COMOUT=${COMOUT:-${COMROOT:?}/${NET}/${envir}/${RUN}.${PDY}/${cyc}/genesis}
+export COMOUTgenvit=${COMOUTgenvit:-${GESROOT:?}/${envir}/${NET}/genesis_vital_${JYYYY}}
+mkdir -m 775 -p $COMOUT $COMOUTgenvit
+
+msg="HAS BEGUN on `hostname`"
+postmsg "$jlogfile" "$msg"
+
+env
+
+${SCRIPTens_tracker}/exnavgem_tc_genesis.sh
+export err=$?; err_chk
+
+msg="JOB COMPLETED NORMALLY"
+postmsg "$jlogfile" "$msg"
+
+##############################
+# Remove the Temporary working directory
+##############################
+if [[ $KEEPDATA != "YES" ]]; then
+  rm -rf $DATA
+fi
+
+date

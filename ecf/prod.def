@@ -1,0 +1,192 @@
+suite prod00
+  family gfs
+    family post
+      task jgfs_post_f120
+      task jgfs_post_f240
+    endfamily
+  endfamily
+  family gefs
+    family prdgen_low
+    endfamily
+  endfamily
+  family ens_tracker
+    edit QUEUE 'prod2'
+    edit PROJ 'GEN'
+    family gefs
+      task jgfs_tc_track
+        trigger ../../gfs/post/jgfs_post_f240 == complete
+      task jgfs_tc_genesis
+        trigger ../../gfs/post/jgfs_post_f120 == complete
+      task jgefs_tc_track
+        trigger ../../gefs/prdgen_low == complete and ( jgfs_tc_track == active or jgfs_tc_track == complete )
+      task jgefs_tc_genesis
+        trigger ../../gefs/prdgen_low == complete and jgfs_tc_genesis == complete
+    endfamily
+    family fens
+      task jnavgem_tc_track
+        time 06:30
+      task jnavgem_tc_genesis
+        time 06:58
+      task jfens_tc_track
+        time 06:45
+      task jfens_tc_genesis
+        time 06:14
+    endfamily
+    family cmce
+      task jcmc_tc_track
+        trigger ../gefs/jgefs_tc_track == complete
+        time 05:16
+      task jcmc_tc_genesis
+        time 05:10
+      task jcens_tc_track
+        trigger /prod06/cmcens/jcmc_ens_post_00 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+      task jcens_tc_genesis
+        trigger /prod06/cmcens/jcmc_ens_post_00 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+    endfamily
+    family ecme
+      task jecmwf_tc_track
+        time 07:00
+      task jecmwf_tc_genesis
+        time 06:30
+      task jeens_grib
+        time 07:46
+      task jeens_tc_track
+        trigger jeens_grib == complete
+      task jeens_tc_genesis
+        trigger jeens_grib == complete
+    endfamily
+    family ukmet
+      task jukmet_grib
+        time 04:35
+      task jukmet_tc_track
+        trigger jukmet_grib == complete
+      task jukmet_tc_genesis
+        trigger jukmet_grib == complete
+    endfamily
+  endfamily
+endsuite
+suite prod06
+  family gfs
+    family post
+      task jgfs_post_f120
+      task jgfs_post_f240
+    endfamily
+  endfamily
+  family gefs
+    family prdgen_low
+    endfamily
+  endfamily
+  family cmcens
+    task jcmc_ens_post_00
+  endfamily
+  family ens_tracker
+    edit QUEUE 'prod2'
+    edit PROJ 'GEN'
+    family gefs
+      task jgfs_tc_track
+        trigger ../../gfs/post/jgfs_post_f240 == complete
+      task jgfs_tc_genesis
+        trigger ../../gfs/post/jgfs_post_f120 == complete
+      task jgefs_tc_track
+        trigger ../../gefs/prdgen_low == complete and ( jgfs_tc_track == active or jgfs_tc_track == complete )
+      task jgefs_tc_genesis
+        trigger ../../gefs/prdgen_low == complete and jgfs_tc_genesis == complete
+    endfamily
+  endfamily
+endsuite
+suite prod12
+  family gfs
+    family post
+      task jgfs_post_f120
+      task jgfs_post_f240
+    endfamily
+  endfamily
+  family gefs
+    family prdgen_low
+    endfamily
+  endfamily
+  family ens_tracker
+    edit QUEUE 'prod2'
+    edit PROJ 'GEN'
+    family gefs
+      task jgfs_tc_track
+        trigger ../../gfs/post/jgfs_post_f240 == complete
+      task jgfs_tc_genesis
+        trigger ../../gfs/post/jgfs_post_f120 == complete
+      task jgefs_tc_track
+        trigger ../../gefs/prdgen_low == complete and ( jgfs_tc_track == active or jgfs_tc_track == complete )
+      task jgefs_tc_genesis
+        trigger ../../gefs/prdgen_low == complete and jgfs_tc_genesis == complete
+    endfamily
+    family fens
+      task jnavgem_tc_track
+        time 18:30
+      task jnavgem_tc_genesis
+        time 18:58
+      task jfens_tc_track
+        time 18:45
+      task jfens_tc_genesis
+        time 18:14
+    endfamily
+    family cmce
+      task jcmc_tc_track
+        trigger ../gefs/jgefs_tc_track == complete
+        time 17:16
+      task jcmc_tc_genesis
+        time 17:10
+      task jcens_tc_track
+        trigger /prod18/cmcens/jcmc_ens_post_12 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+      task jcens_tc_genesis
+        trigger /prod18/cmcens/jcmc_ens_post_12 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+    endfamily
+    family ecme
+      task jecmwf_tc_track
+        time 19:00
+      task jecmwf_tc_genesis
+        time 18:30
+      task jeens_grib
+        time 19:46
+      task jeens_tc_track
+        trigger jeens_grib == complete
+      task jeens_tc_genesis
+        trigger jeens_grib == complete
+    endfamily
+    family ukmet
+      task jukmet_grib
+        time 16:35
+      task jukmet_tc_track
+        trigger jukmet_grib == complete
+      task jukmet_tc_genesis
+        trigger jukmet_grib == complete
+    endfamily
+  endfamily
+endsuite
+suite prod18
+  family gfs
+    family post
+      task jgfs_post_f120
+      task jgfs_post_f240
+    endfamily
+  endfamily
+  family gefs
+    family prdgen_low
+    endfamily
+  endfamily
+  family cmcens
+    task jcmc_ens_post_12
+  endfamily
+  family ens_tracker
+    edit QUEUE 'prod2'
+    edit PROJ 'GEN'
+    family gefs
+      task jgfs_tc_track
+        trigger ../../gfs/post/jgfs_post_f240 == complete
+      task jgfs_tc_genesis
+        trigger ../../gfs/post/jgfs_post_f120 == complete
+      task jgefs_tc_track
+        trigger ../../gefs/prdgen_low == complete and ( jgfs_tc_track == active or jgfs_tc_track == complete )
+      task jgefs_tc_genesis
+        trigger ../../gefs/prdgen_low == complete and jgfs_tc_genesis == complete
+    endfamily
+  endfamily
+endsuite

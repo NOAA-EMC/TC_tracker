@@ -1,0 +1,26 @@
+#%Module  for HERA  ################################################
+
+module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+module use /apps/modules/modulefamilies/intel
+module use /apps/modules/modulefamilies/intel_impi
+
+module load intel/18.0.5.274
+module load impi/2019.0.4
+module load nco/4.7.0
+
+module load png/1.2.44
+module load w3emc/2.3.1
+module load w3nco/2.0.6
+module load bacio/2.0.3
+module load g2/3.1.0
+
+module load z/1.2.11
+module load jasper/1.900.1
+module load sigio/2.1.1
+module load sp/2.0.2
+module load ip/2.0.0
+
+#module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+module load hdf5_parallel/1.12.0
+module load netcdf_parallel/4.7.5
+module load w3emc_para/2.4.0
