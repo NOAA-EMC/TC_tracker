@@ -1,25 +1,17 @@
 #!/bin/sh
 
 #---------------------------------------------------------
-if [[ -d /dcom ]] ; then
-  # We are on NOAA Tide or Gyre
+if [[ ! -d ../exec ]] ; then mkdir ../exec ; fi
 
-machine=wcoss
-export INC="${G2_INCd} ${NETCDF_INCLUDE} -I${PNETCDF}/include ${HDF5_INCLUDE}"
-export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${SP_LIBd} ${IP_LIBd} ${NETCDF_LDFLAGS} -L${PNETCDF}/lib -lpnetcdf ${HDF5_LDFLAGS}"
-export LIBS_SUP="${W3EMC_LIBd} ${W3NCO_LIBd}"
-export LIBS_UK="${W3NCO_LIB4} ${BACIO_LIB4}"
+# Purge current modules
+module purge
+# Use modules within
+module use .
 
-for dir in *.fd; do
-  cd $dir
-  make clean
-  make -f makefile_wcoss
-  make install
-  cd ..
-done
-
-elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
-  # We are on NOAA Luna or Surge
+#---------------------------------------------------------
+if [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
+ # Load module file for Cray (NOAA Luna or Surge)
+ module load Module_ens_tracker.v1.1.15_for_Cray
 
  machine=cray
  export INC="${G2_INCd} ${NETCDF_INCLUDE} -I${PNETCDF_INC} ${HDF5_INCLUDE}"
@@ -36,7 +28,8 @@ for dir in *.fd; do
 done
 
 elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
-  # We are on NOAA Mars or Venus
+ # Load module file for Dell (NOAA Mars or Venus)
+ module load Module_ens_tracker.v1.1.15_for_Dell
 
  machine=dell
 # export INC="${G2_INCd} ${NETCDF_INCLUDE} ${HDF5_INCLUDE}"
@@ -55,7 +48,8 @@ for dir in *.fd; do
 done
 
 elif [[ -d /scratch2 ]] ; then
-  # We are on NOAA Hera
+ # Load module file for NOAA Hera
+ module load Module_ens_tracker.v1.1.15_for_Hera
 
 machine=hera
 export INC="${G2_INCd} -I${NETCDF}/include -I${HDF5}/include "
@@ -74,7 +68,8 @@ for dir in *.fd; do
 done
 
 elif [[ -d /work ]] ; then
-  # We are on MSU Orion
+ # Load module file for MSU Orion
+ module load Module_ens_tracker.v1.1.15_for_Orion
 
 machine=orion
 export INC="${G2_INCd} -I${NETCDF}/include -I${HDF5_ROOT}/include "
@@ -92,7 +87,8 @@ for dir in *.fd; do
 done
 
 elif [[ -d /lfs3 ]] ; then
-  # We are on NOAA Jet
+ # Load module file for Jet
+ module load Module_ens_tracker.v1.1.15_for_Jet
 
 machine=jet
 #export INC="${G2_INCd} -I${NETCDF}/include ${PNETCDF_INCLUDE} ${HDF5_INCLUDE_OPTS} "

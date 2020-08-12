@@ -6,9 +6,6 @@ Module_ens_tracker.v1.1.15_for_Hera
 Module_ens_tracker.v1.1.15_for_Orion
 
 To build codes:
-
-    cd /XXXX/sorc
-     1) module use .
-     2) module load Module_ens_tracker.v1.1.15_for_Orion
-     3) ./build.sh
+  cd /XXXX/sorc
+  ./build.sh
 
