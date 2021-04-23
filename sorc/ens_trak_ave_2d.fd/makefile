@@ -1,5 +1,5 @@
 SHELL=  /bin/sh
-COMP=   ifort
+COMP=   mpiifort
 FFLAGS= -O3 -g -traceback -convert big_endian
 
 ens_trak_ave_2d:      ens_trak_ave_2d.f

@@ -1,7 +1,7 @@
 SHELL=  /bin/sh
 ISIZE = 4
 RSIZE = 8
-FCOMP=  ifort -nofree
+FCOMP=  mpiifort -nofree
 FFLAGS= -O3 -g -traceback -convert big_endian -I $(INC) -i$(ISIZE) -r$(RSIZE)
 
 vint_g1: vint_g1.f 

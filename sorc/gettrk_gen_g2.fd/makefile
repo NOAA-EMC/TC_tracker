@@ -1,8 +1,8 @@
 SHELL=  /bin/sh
 ISIZE = 4
 RSIZE = 8
-FCOMP=  ifort -nofree
-CCOMP=  icc
+FCOMP=  mpiifort -nofree
+CCOMP=  mpiicc
 FFLAGS= -O3 -g -traceback -convert big_endian -I $(INC) -i$(ISIZE) -r$(RSIZE)
 CFLAGS= -O3
 

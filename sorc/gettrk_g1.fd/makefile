@@ -1,7 +1,7 @@
 SHELL=  /bin/sh
 ISIZE = 4
 RSIZE = 8
-FCOMP=  ifort -nofree 
+FCOMP=  mpiifort -nofree 
 FFLAGS= -O3 -g -traceback -convert big_endian -I $(INC) -i$(ISIZE) -r$(RSIZE)
 
 gettrk_g1:      gettrk_main_g1.f gettrk_modules.o 

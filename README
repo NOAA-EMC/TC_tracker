@@ -1,3 +1,30 @@
+#---  03/11/2021  -------
+It is copied from /gpfs/dell2/emc/modeling/save/Kate.Friedman/git/ens_tracker/ens_tracker.v1.1.15.4_4_Kate
+Venus: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.4/sorc
+The update includes:
+
+(1) All of icc in makefile/makefile_hera/makefile_orion will be updated as "mpiicc"
+All of ifort in makefile/makefile_hera/makefile_orion will be updated as "mpiifort"
+
+*.fd/makefile
+*.fd/makefile_hera
+*.fd/makefile_orion
+
+(2)./sorc/Module_ens_tracker.v1.1.15_for_Dell
+./sorc/Module_ens_tracker.v1.1.15_for_Hera
+./sorc/Module_ens_tracker.v1.1.15_for_Orion
+
+(3)./sorc/build.sh
+
+#---  03/02/2021  -------
+Venus: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.4_Kate
+Update for hpc-stack module. The changes include:
+(1)./sorc/Module_ens_tracker.v1.1.15_for_Dell
+
+(2)./sorc/build.sh
+
+
+
 #---  08/06/2020  -------
 Mars: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.3_4_Kate
 

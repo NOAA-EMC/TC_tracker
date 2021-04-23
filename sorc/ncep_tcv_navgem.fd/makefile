@@ -1,5 +1,5 @@
 SHELL=  /bin/sh
-COMP=   ifort
+COMP=   mpiifort
 FFLAGS= -O3 -g -traceback -convert big_endian 
 
 tcvital_ch_navgem:      tcvital_ch_navgem.f

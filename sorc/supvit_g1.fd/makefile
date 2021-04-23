@@ -1,7 +1,7 @@
 SHELL=  /bin/sh
 ISIZE = 4
 RSIZE = 8
-COMP=   ifort
+COMP=   mpiifort
 FFLAGS= -O3 -g -traceback -convert big_endian -i$(ISIZE) -r$(RSIZE)
 
 supvit_g1:     supvit_main_g1.f supvit_modules.o

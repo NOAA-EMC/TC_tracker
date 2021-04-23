@@ -1,7 +1,7 @@
 SHELL=  /bin/bash
 ISIZE = 4
 RSIZE = 8
-COMP=   ifort
+COMP=   mpiifort
 FFLAGS= -O3 -g -traceback -convert big_endian -I $(INC) -i$(ISIZE) -r$(RSIZE)
 
 wsr_ecmwfensh: ecmwfensh.f 

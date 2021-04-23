@@ -32,14 +32,17 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
  module load Module_ens_tracker.v1.1.15_for_Dell
 
  machine=dell
+ export NETCDF_LDFLAGS="-L${NETCDF_ROOT}/lib -lnetcdff -lnetcdf -L${HDF5_ROOT}/lib -lhdf5_hl -lhdf5 -L${ZLIB_ROOT}/lib -lz -ldl -lm"
+ export NETCDF_INCLUDES="-I${NETCDF_ROOT}/include -I${HDF5_ROOT}/include"
 # export INC="${G2_INCd} ${NETCDF_INCLUDE} ${HDF5_INCLUDE}"
 # export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${NETCDF_LDFLAGS} ${HDF5_LDFLAGS}"
- export INC="${G2_INCd} ${NETCDF_INCLUDE} ${PNetCDF_INCLUDE}"
- export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${NETCDF_LDFLAGS} ${PNetCDF_LDFLAGS}"
+ export INC="${G2_INCd} ${NETCDF_INCLUDES} ${PNetCDF_INCLUDE}"
+ export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_ROOT}/lib64/libpng.a ${JASPER_ROOT}/lib64/libjasper.a ${ZLIB_ROOT}/lib/libz.a ${NETCDF_LDFLAGS} ${PNetCDF_LDFLAGS}"
  export LIBS_SUP="${W3EMC_LIBd} ${W3NCO_LIBd}"
  export LIBS_UK="${W3NCO_LIB4} ${BACIO_LIB4}"
 
 for dir in *.fd; do
+#for dir in gettrk_gfs.fd; do
   cd $dir
   make clean
   make -f makefile
@@ -52,9 +55,11 @@ elif [[ -d /scratch2 ]] ; then
  module load Module_ens_tracker.v1.1.15_for_Hera
 
 machine=hera
-export INC="${G2_INCd} -I${NETCDF}/include -I${HDF5}/include "
-#export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${SP_LIBd} ${IP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf -L${HDF5}/lib -lhdf5_hl -lhdf5hl_fortran -lhdf5 -lhdf5_fortran " 
-export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${SP_LIBd} ${IP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf -L${HDF5}/lib -lhdf5_hl -lhdf5 " 
+export NETCDF_LDFLAGS="-L${NETCDF_ROOT}/lib -lnetcdff -lnetcdf -L${HDF5_ROOT}/lib -lhdf5_hl -lhdf5 -L${ZLIB_ROOT}/lib -lz -ldl -lm"
+export NETCDF_INCLUDES="-I${NETCDF_ROOT}/include -I${HDF5_ROOT}/include"
+
+export INC="${G2_INCd} ${NETCDF_INCLUDES}"
+export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_ROOT}/lib64/libpng.a ${JASPER_ROOT}/lib64/libjasper.a ${ZLIB_ROOT}/lib/libz.a ${NETCDF_LDFLAGS}"
 export LIBS_SUP="${W3EMC_LIBd} ${W3NCO_LIBd}"
 export LIBS_UK="${W3NCO_LIB4} ${BACIO_LIB4}"
 
@@ -62,7 +67,7 @@ for dir in *.fd; do
 #for dir in leadtime.fd; do
   cd $dir
   make clean
-  make -f makefile_wcoss
+  make -f makefile_hera
   make install
   cd ..
 done
@@ -72,8 +77,11 @@ elif [[ -d /work ]] ; then
  module load Module_ens_tracker.v1.1.15_for_Orion
 
 machine=orion
-export INC="${G2_INCd} -I${NETCDF}/include -I${HDF5_ROOT}/include "
-export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_LIB} ${JASPER_LIB} ${Z_LIB} ${SP_LIBd} ${IP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf -L${HDF5_ROOT}/lib" 
+export NETCDF_LDFLAGS="-L${NETCDF_ROOT}/lib -lnetcdff -lnetcdf -L${HDF5_ROOT}/lib -lhdf5_hl -lhdf5 -L${ZLIB_ROOT}/lib -lz -ldl -lm"
+export NETCDF_INCLUDES="-I${NETCDF_ROOT}/include -I${HDF5_ROOT}/include"
+
+export INC="${G2_INCd} ${NETCDF_INCLUDES}"
+export LIBS="${W3EMC_LIBd} ${W3NCO_LIBd} ${BACIO_LIB4} ${G2_LIBd} ${PNG_ROOT}/lib64/libpng.a ${JASPER_ROOT}/lib64/libjasper.a ${ZLIB_ROOT}/lib/libz.a ${NETCDF_LDFLAGS}"
 export LIBS_SUP="${W3EMC_LIBd} ${W3NCO_LIBd}"
 export LIBS_UK="${W3NCO_LIB4} ${BACIO_LIB4}"
 

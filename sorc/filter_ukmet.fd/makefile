@@ -1,5 +1,5 @@
 SHELL=  /bin/sh
-COMP=   ifort
+COMP=   mpiifort
 FFLAGS= -O3 -g -traceback -convert big_endian 
 
 filter_gen_ukmet:      filter_gen_ukmet.f

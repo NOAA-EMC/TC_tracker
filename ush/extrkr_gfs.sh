@@ -639,7 +639,8 @@ future_str="${future_ymd} ${future_hh}00"
 
 if [ ${modtyp} = 'global' ]
 then
-  synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+  #synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+  synvitdir=${COMINgfs:?}
   synvitfile=gfs.t${cyc}z.syndata.tcvitals.tm00
   synvitold_dir=${synvitdir%.*}.${old_4ymd}/${old_hh}/${COMPONENT}
   synvitold_file=gfs.t${old_hh}z.syndata.tcvitals.tm00
