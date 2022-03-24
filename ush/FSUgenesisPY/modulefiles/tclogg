@@ -1,0 +1,7 @@
+#%Module
+
+module-whatis "Sets environment for tclogg tracker"
+module load python/3.6.3
+prepend-path PATH /gpfs/dell2/emc/modeling/noscrub/emc.glopara/git/tracker/ens_tracker.v1.1.15.4/ush/FSUgenesisPY/bin
+prepend-path PYTHONPATH /gpfs/dell2/emc/modeling/noscrub/emc.glopara/git/tracker/ens_tracker.v1.1.15.4/ush/FSUgenesisPY
+prepend-path PYTHONPATH /usrx/local/prod/packages/python/3.6.3/lib/python3.6
