@@ -38,9 +38,7 @@ cd $TRKDATA
 #unlink $HOMEens_tracker/tclogg/genesis_guidance/model_config.cfg
 #ln -sf ${namelist} $HOMEens_tracker/tclogg/genesis_guidance/model_config.cfg
 
-#export file_name=${gfsdir}/gfs.{date:%Y%m%d}/{date:%H}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
-export COMPONENT=${COMPONENT:-atmos}
-export file_name=${gfsdir}/gfs.{date:%Y%m%d}/{date:%H}/${COMPONENT}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
+export file_name=${gfsdir/${PDY}\/${cyc}/'{date:%Y%m%d}/{date:%H}'}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
 ${BINens_tracker}/tclogg_track --date ${ymdh} --odir $TRKDATA --fname_template=${file_name}
 
 #if [ "$SENDCOM" = 'YES' ]; then

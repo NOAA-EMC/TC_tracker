@@ -8,7 +8,7 @@ export cmodel=gfs
 #export gfsdir=${COMINgfs}
 export COMPONENT=${COMPONENT:-atmos}
 #export gfsdir=${COMINgfs}/${cyc}/${COMPONENT}
-export gfsdir=${gfsdir:-${COMINgfs}/${cyc}/${COMPONENT}}
+export gfsdir=${gfsdir:-${COMINgfs}}
 
 #-----------input data checking -----------------
 ${USHens_tracker}/data_check_gfs.sh
