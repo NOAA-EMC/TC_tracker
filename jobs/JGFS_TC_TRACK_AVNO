@@ -1,0 +1,124 @@
+#!/bin/sh 
+date
+export PS4=' $SECONDS + '
+set -x
+
+####################################
+# obtain unique process id (pid) and make temp directory
+####################################
+export jobid=${jobid:-$job.o$$}
+export DATA=${DATA:-${DATAROOT:?}/${jobid}}
+mkdir -p $DATA
+cd $DATA
+export cycle=t${cyc}z
+
+####################################
+# File To Log Msgs
+####################################
+export jlogfile=${jlogfile:-${COMROOT}/logs/jlogfiles/jlogfile.${jobid}}
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${NET:-ens_tracker}
+export RUN=${RUN:-gfs}
+#export RUN=${RUN:-gfs}
+
+####################################
+# Determine Job Output Name on System
+####################################
+export pgmout="OUTPUT.$$"
+export pgmerr=errfile
+
+####################################
+# SENDECF  - Flag Events on ecFLOW
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export SENDDBN=${SENDDBN:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEens_tracker=${HOMEens_tracker:-${NWROOT:?}/ens_tracker.${ens_tracker_ver}}
+export EXECens_tracker=${EXECens_tracker:-$HOMEens_tracker/exec}
+export FIXens_tracker=${FIXens_tracker:-$HOMEens_tracker/fix}
+export USHens_tracker=${USHens_tracker:-$HOMEens_tracker/ush}
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+setpdy.sh
+. PDY
+
+##############################################
+# Define COM directories
+##############################################
+export COMINgfs=${COMINgfs:-$(compath.py gfs/prod/gfs.$PDY)}
+export COMINsyn=${COMINsyn:-$(compath.py arch/prod/syndat)}
+
+export COMOUT=${COMOUT:-${COMROOT:?}/${NET}/${envir}/${RUN}.${PDY}/${cyc}/tctrack}
+export COMOUThur=${COMOUThur:-${COMROOT:?}/${NET}/${envir}/global}
+export COMOUTatcf=${COMOUTatcf:-${COMROOT:?}/${NET}/${envir}/atcf}
+mkdir -m 775 -p $COMOUT $COMOUThur $COMOUTatcf
+
+msg="HAS BEGUN on `hostname`"
+postmsg "$jlogfile" "$msg"
+
+env
+
+#############################################################
+# Execute the script
+export cmodel=gfs
+export loopnum=1
+export ymdh=${PDY}${cyc}
+
+export gfsdir=${COMINgfs}/${cyc}
+
+export pert="p01"
+pertdir=${DATA}/${cmodel}/${pert}
+mkdir -p $pertdir
+
+#-----------input data checking -----------------
+${USHens_tracker}/data_check_gfs.sh 
+# exit code 6 = missing data of opportunity
+if [ $? -eq 6 ]; then exit; fi
+#------------------------------------------------
+
+#outfile=${pertdir}/trkr.${cmodel}.${pert}.${ymdh}.out
+
+mac=`echo ${SITE}`
+if [ $mac = TIDE -o $mac = GYRE ] ; then # For WCOSS
+  machine=wcoss
+  ${USHens_tracker}/extrkr_gfs.sh ${loopnum} ${cmodel} ${ymdh} ${pert} ${pertdir} #2>&1 >${outfile}
+elif [ $mac = LUNA -o $mac = SURGE ] ; then # For CRAY
+  machine=cray
+  ${APRUNTRACK} ${USHens_tracker}/extrkr_gfs.sh ${loopnum} ${cmodel} ${ymdh} ${pert} ${pertdir} #2>&1 >${outfile}
+fi
+export err=$?; err_chk
+
+if [ "$SENDCOM" = 'YES' ]; then
+  if [ -s ${pertdir}/trak.avno.atcfunix.${PDY}${cyc} ]; then
+    cp ${pertdir}/trak.avno.atcfunix.${PDY}${cyc} ${COMOUT}/avn.t${cyc}z.cyclone.trackatcfunix
+
+    cat ${pertdir}/trak.avno.atcfunix.${PDY}${cyc} | \
+      sed s:AVNO:GFSO:g \
+    > ${COMOUT}/gfso.t${cyc}z.cyclone.trackatcfunix
+  fi
+fi
+
+#############################################################
+
+msg="JOB COMPLETED NORMALLY"
+postmsg "$jlogfile" "$msg"
+
+##############################
+# Remove the Temporary working directory
+##############################
+if [[ $KEEPDATA != "YES" ]]; then
+  rm -rf $DATA
+fi
+
+date

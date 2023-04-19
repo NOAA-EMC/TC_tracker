@@ -1,0 +1,17 @@
+import os
+
+module_file = """#%Module
+
+module-whatis "Sets environment for tclogg tracker"
+
+module load ips/18.0.1.163
+module load python/2.7.14
+module load pygrib/2.0.4
+
+prepend-path PATH {cwd}/bin
+
+prepend-path PYTHONPATH {cwd}
+"""
+
+with open('modulefiles/tclogg', 'w') as f:
+    f.write(module_file.format(cwd=os.getcwd()))

@@ -1,0 +1,285 @@
+#---  04/19/2023  -------
+This package could be run on wcoss2, hera, jet, orion.
+The EPIC/hpc-stack is applied for compile on hera, jet, orion.
+
+#---  12/09/2021  ------
+Cactus: /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5
+
+(1) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/sorc
+Module_ens_tracker.v1.1.15_for_Wcoss2   ---- added-----
+build.sh   ---- updated ----
+README.build  ---- updated ----
+
+(2) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/versions ---- added-----
+build.ver
+run.ver
+
+(3) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/modulefiles  ---- added-----
+build.module_load_wcoss2  
+run.module_load_wcoss2
+tracker_wcoss2.lua
+
+(4) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/ush/FSUgenesisPY
+renamed  ---- pathlib.py  ---- as ---- pathlibTC.py
+renamed  ---- pathlib.pyc  ---- as ---- pathlibTC.pyc
+
+(5) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/control/wcoss2  ---- added ---
+jfsu_tc_genesis_00.ecf_wcoss2
+jfv3_cyclone_track_00.ecf_wcoss2
+jfv3_cyclone_genesis_00.ecf_wcoss2
+jfv3gdas_cyclone_track_00.ecf_wcoss2
+
+(6) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/jobs
+JFSU_TC_GENESIS_JP ---- updated ----
+JFV3_CYCLONE_TRACK_JP  ---- updated ----
+JFV3_CYCLONE_GENESIS_JP ---- updated ----
+JFV3GDAS_CYCLONE_TRACK_JP  ---- updated ----
+
+(7) /lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.5/scripts
+exgfs_fsu_genesis.sh  ---- updated ----
+exgfs_tc_track.sh  ---- updated ----
+exgfs_tc_genesis.sh  ---- updated ----
+exgdas_tc_track.sh  ---- updated ----
+
+(8) the output:
+/lfs/h2/emc/vpppg/noscrub/Jiayi.Peng/canned_output_v1.1.15.5
+
+
+#---  03/11/2021  -------
+It is copied from /gpfs/dell2/emc/modeling/save/Kate.Friedman/git/ens_tracker/ens_tracker.v1.1.15.4_4_Kate
+Venus: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.4/sorc
+The update includes:
+
+(1) All of icc in makefile/makefile_hera/makefile_orion will be updated as "mpiicc"
+All of ifort in makefile/makefile_hera/makefile_orion will be updated as "mpiifort"
+
+*.fd/makefile
+*.fd/makefile_hera
+*.fd/makefile_orion
+
+(2)./sorc/Module_ens_tracker.v1.1.15_for_Dell
+./sorc/Module_ens_tracker.v1.1.15_for_Hera
+./sorc/Module_ens_tracker.v1.1.15_for_Orion
+
+(3)./sorc/build.sh
+
+#---  03/02/2021  -------
+Venus: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.4_Kate
+Update for hpc-stack module. The changes include:
+(1)./sorc/Module_ens_tracker.v1.1.15_for_Dell
+
+(2)./sorc/build.sh
+
+
+
+#---  08/06/2020  -------
+Mars: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.3_4_Kate
+
+The new FSU-genesis package is added in this package.
+The GFS and TC-vital data path has been updated:
+export COMPONENT=${COMPONENT:-atmos}
+gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}/${COMPONENT}} ;
+synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+
+(1) FSU-genesis
+The source python scripts: ./ush/FSUgenesisPY
+Please read: README_4_tclogg for compile and run
+./control/dell/jfsu_tc_genesis_00.ecf_dell
+./jobs/JFSU_TC_GENESIS_JP
+./scripts/exgfs_fsu_genesis.sh
+  export gfsdir=/gpfs/dell1/nco/ops/com/gfs/prod
+./ush/data_check_gfs_180hr.sh
+  export COMPONENT=${COMPONENT:-atmos} .... missing
+  datdir=${gfsdir}/gfs.${PDY}/${cyc}/${COMPONENT}
+./ush/extrkr_fsu.sh
+  export COMPONENT=${COMPONENT:-atmos}
+  export file_name=${gfsdir}/gfs.{date:%Y%m%d}/{date:%H}/${COMPONENT}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
+
+(2) GFS-track
+./control/dell/jfv3_cyclone_track_00.ecf_dell
+./jobs/JFV3_CYCLONE_TRACK_JP
+./scripts/exgfs_tc_track.sh
+  export COMPONENT=${COMPONENT:-atmos}
+  export gfsdir=${COMINgfs}/${cyc}/${COMPONENT}
+./ush/data_check_gfs.sh
+./ush/extrkr_gfs.sh
+  gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}/${COMPONENT}} ;
+  synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+  synvitold_dir=${synvitdir%.*}.${old_4ymd}/${old_hh}/${COMPONENT}
+  synvitfuture_dir=${synvitdir%.*}.${future_4ymd}/${future_hh}/${COMPONENT}
+
+(3) GDAS-track
+./control/dell/jfv3gdas_cyclone_track_00.ecf_dell
+./jobs/JFV3GDAS_CYCLONE_TRACK_JP
+./scripts/exgdas_tc_track.sh
+  export COMPONENT=${COMPONENT:-atmos}
+  export gdasdir=${COMINgdas}/${cyc}/${COMPONENT}
+./ush/data_check_gdas.sh
+./ush/extrkr_gfs.sh
+  gdasdir=${gdasdir:-${COMINgdas:?}/${cyc}/${COMPONENT}}    ;
+
+(4) GFS-genesis
+./control/dell/jfv3_cyclone_genesis_00.ecf_dell
+./jobs/JFV3_CYCLONE_GENESIS_JP
+./scripts/exgfs_tc_genesis.sh
+  export COMPONENT=${COMPONENT:-atmos}
+  export gfsdir=${COMINgfs}/${cyc}/${COMPONENT}
+./ush/data_check_gfs.sh
+./ush/extrkr_tcv_gfs.sh
+  gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}/${COMPONENT}}  ;
+  synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+  synvitold_dir=${synvitdir%.*}.${old_4ymd}/${old_hh}/${COMPONENT}
+  synvitfuture_dir=${synvitdir%.*}.${future_4ymd}/${future_hh}/${COMPONENT}
+./ush/extrkr_gen_gfs.sh
+  gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}/${COMPONENT}} ;
+  synvitdir=${COMINgfs:?}/${cyc}/${COMPONENT}
+  synvitold_dir=${synvitdir%.*}.${old_4ymd}/${old_hh}/${COMPONENT}
+  synvitfuture_dir=${synvitdir%.*}.${future_4ymd}/${future_hh}/${COMPONENT}
+#
+#---  06/11/2020  -------#
+This version is copied from HERA: /scratch2/NCEPDEV/ensemble/Jiayi.Peng/noscrub/ens_tracker.v1.1.15.2
+It is tested for JET.
+
+#---  06/08/2020  -------
+The same as: https://github.com/NOAA-EMC/TC_tracker/tree/TC_tracker.v1.1.15.2
+
+#---  06/05/2020  -------
+/gpfs/hps3/emc/ensemble/save/Jiayi.Peng/ens_tracker.v1.1.15.4 (Venus/Surge)
+This version is created by adding FSU TC genesis calculation package.
+How to compile/run  FSU TC genesis: (see ./tclogg/README_4_tclogg)
+
+The development includes:
+$$$$$$$$$$$$$$$$$$$$$$$$$
+#---  02/28/2020   updated for python/3.6.3  -------
+(1) /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.3/tclogg/bin
+tclogg_track  .... updated  (python2 changed as python)
+
+(2) /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.3/tclogg
+make_modulefile_4_dell.py  .... updated for python/3.6.3 on DELL  by adding:
+prepend-path PYTHONPATH /usrx/local/prod/packages/python/3.6.3/lib/python3.6
+make -f Makefile_4_dell   ....to create a module file
+
+make_modulefile_4_cray.py .... updated for python/3.6.3 on CRAY  by adding:
+prepend-path PYTHONPATH /usrx/local/prod/python/3.6.3/lib/python3.6
+make -f Makefile_4_cray   ....to create a module file
+
+(3)/gpfs/hps3/emc/ensemble/save/Jiayi.Peng/ens_tracker.v1.1.15.3/control/cray
+jfsu_tc_genesis_00.ecf_cray .... added for Cray
+
+#---  12/17/2019  -------
+Mars: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.3
+(1)change the file: /tclogg/genesis_guidance/model_config.cfg
+commnet out the line:
+#fname_template = /gpfs/dell1/nco/ops/com/gfs/prod/gfs.{date:%Y%m%d}/{date:%H}/gfs.t{date:%H}z.pgrb2.0p25.f{fhr:03}
+
+(2)./ush/extrkr_fsu.sh   define the "fname_template"
+tclogg_track --date ${ymdh} --odir $TRKDATA --fname_template=${file_name}
+
+#---  12/10/2019  -------
+The FSU TC genesis package is added here (based on ens_tracker.v1.1.15.1):
+
+Mars: /gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.2/tclogg
+(1)cd ./tclogg
+make -f Makefile   ....to create a module file
+chmod +x ./bin/tclogg_track
+
+(2)./control/dell/jfsu_tc_genesis_00.ecf_dell is added
+Inside: module use ${NWROOT}/ens_tracker.${ens_tracker_ver}/tclogg/modulefiles
+        module load tclogg
+
+(3)./jobs/JFSU_TC_GENESIS_JP is added.
+
+(4)./ush/
+data_check_gfs_180hr.sh   ....added
+extrkr_fsu.sh    ....added
+
+$$$$$$$$$$$$$$$$$$$$$$$$$
+#---  06/03/2020  -------
+This version is created for GFS-V16 TC-track/genesis parallel/retrospective runs.
+It could be run on Dell/Cray/Hera/Orion  machine, including netcdf_parallel on Dell/Hera/Orion.
+extrkr_tcv_gfs.sh .... updated with ${COMINgfs)/$(cyc)
+extrkr_gen_gfs.sh .... updated with ${COMINgfs)/$(cyc)
+#
+#---  10/16/2019  -------
+This version is created for GFS-V16 TC-track/genesis parallel/retrospective runs.
+It could be run on Dell/Cray/Hera machine.
+
+#---  10/07/2019  -------
+This version is modified for HERA machine.
+export ROOT=/scratch2/NCEPDEV/ensemble/Jiayi.Peng/noscrub/ens_tracker.v1.1.15.1
+
+(1) THE CODE:
+1. gettrk_main_gfs.f ....updated in ${ROOT}/sorc/gettrk_gfs.fd
+LINE 17781:
+ c J.Peng---07/26/2019 to free the memory in reading GRIB2 data
+           call gf_free (gfld) 
+LINE 18053:
+c J.Peng---10/07/2019 to free the memory in reading GRIB2 data
+              call gf_free (gfld)
+LINE 20718:
+c J.Peng---10/07/2019 to free the memory in reading GRIB2 data
+              call gf_free (gfld)
+
+2. gettrk_gen_main_gfs.f .... added in ${ROOT}/sorc/gettrk_gen_gfs.fd
+   the new code for GFS TC genesis.
+
+LINE 18454:
+ c J.Peng---07/29/2019 to free the memory in reading GRIB2 data
+           call gf_free (gfld)
+LINE 18725:
+c J.Peng---10/07/2019 to free the memory in reading GRIB2 data
+              call gf_free (gfld)
+LINE 21392:
+c J.Peng---10/07/2019 to free the memory in reading GRIB2 data
+              call gf_free (gfld)
+
+
+(2)The COMPILE: ${ROOT}/sorc/
+Module_ens_tracker.v1.1.15_for_Hera .... added
+
+#---07262019-------
+This version is copied from Luna/Surge:
+/gpfs/hps/nco/ops/nwprod/ens_tracker.v1.1.15
+
+It is modified for GFS-V16.0 parallel runs. The update includes (on MARS):
+export ROOT=/gpfs/dell2/emc/modeling/noscrub/Jiayi.Peng/ens_tracker.v1.1.15.1
+
+(1) THE CODE:
+
+1. gettrk_main_gfs.f ....updated in ${ROOT}/sorc/gettrk_gfs.fd
+ c J.Peng---07/26/2019 to free the memory in reading GRIB2 data
+           call gf_free (gfld)
+2. leadtime.f .... added in ${ROOT}/sorc/leadtime.fd
+   creating forecast leading hours with maxhrs/dthrs
+3. gettrk_gen_main_gfs.f .... added in ${ROOT}/sorc/gettrk_gen_gfs.fd
+   the new code for GFS TC genesis.
+
+
+(2)The COMPILE: ${ROOT}/sorc/
+Removing: Module_ens_tracker_v1.1 and Module_ens_tracker.v1.1.8_Cray-intel-haswell
+Adding: Module_ens_tracker.v1.1.15_for_Cray/Dell/Jet/Theia/Wcoss
+        makefile_cray  makefile_dell  makefile_jet  makefile_wcoss in *.fd
+Updating: README.build and build.sh
+
+(3) The job-control: ${ROOT}/control/dell
+jfv3_cyclone_track_00.ecf_dell .... updated
+jfv3_cyclone_genesis_00.ecf_dell .... updated
+jfv3gdas_cyclone_track_00.ecf_dell .... updated
+
+(4) The jobs: ${ROOT}/jobs
+JFV3_CYCLONE_TRACK_JP .... updated
+JFV3_CYCLONE_GENESIS_JP .... updated
+JFV3GDAS_CYCLONE_TRACK_JP .... updated
+
+(5) The ush:
+data_check_gfs.sh .... added
+data_check_gdas.sh .... added
+extrkr_gfs.sh .... updated
+extrkr_tcv_gfs.sh .... added
+extrkr_gen_gfs.sh .... added
+
+
+(6) The scripts:
+exgfs_tc_genesis.sh .... updated
+
+

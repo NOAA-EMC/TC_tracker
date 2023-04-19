@@ -1,0 +1,56 @@
+#!/bin/bash
+#PBS -N gfs_TC_00
+#PBS -o /lfs/h2/emc/ptmp/jiayi.peng/output/gfs_track_00.out
+#PBS -e /lfs/h2/emc/ptmp/jiayi.peng/output/gfs_track_00.err
+#PBS -A ENSTRACK-DEV
+#PBS -l select=1:ncpus=2:mem=4GB
+#PBS -q dev_transfer
+#PBS -l walltime=00:30:00
+
+#%include <head.h> 
+#%include <envir-p2.h>
+set -x -e
+
+export NWROOT=/lfs/h2/emc/vpppg/noscrub/jiayi.peng
+# versions file for tracker $tracker.ver
+VERSION_FILE=${NWROOT}/versions/tracker.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+#source ${NWROOT}/ens_tracker.${ens_tracker_ver}/versions/run.ver
+source ${NWROOT}/ens_tracker.${ens_tracker_ver}/modulefiles/run.module_load_wcoss2
+module list
+
+#export envir=dev
+export cyc=00
+export job=gfs_track_${cyc}
+export COMROOT=/lfs/h2/emc/ptmp/jiayi.peng/$envir/com
+export DATAROOT=/lfs/h2/emc/ptmp/jiayi.peng
+export KEEPDATA=YES
+
+# CALL executable job script here
+${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JFV3_CYCLONE_TRACK_JP
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+#%include <tail.h> 
+#%manual
+######################################################################
+#PURPOSE:  Executes the job that creates GFS TC track forecasts
+######################################################################
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+#%end

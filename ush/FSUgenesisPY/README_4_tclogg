@@ -1,0 +1,16 @@
+#------  07/23/2020 ---------------------------------------
+The FSU genesis package could be run on CRAY/DELL, it needs pygrib.
+(1)cd ./ush/FSUgenesisPY  .... for compile
+make -f Makefile_4_cray   ....to create a module file
+chmod +x ./bin/tclogg_track
+
+module unload anaconda2/latest .... for dell
+make -f Makefile_4_dell   ....to create a module file
+
+(2)./control/dell/jfsu_tc_genesis_00.ecf_dell 
+./control/cray/jfsu_tc_genesis_00.ecf_cray
+
+Inside: module use ${NWROOT}/ens_tracker.${ens_tracker_ver}/ush/FSUgenesisPY/modulefiles
+        module load tclogg
+bsub < jfsu_tc_genesis_00.ecf_dell
+.OR.  bsub < jfsu_tc_genesis_00.ecf_cray

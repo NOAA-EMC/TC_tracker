@@ -1,0 +1,64 @@
+extern /prod12/gfs/post/jgfs_post_f120
+extern /prod12/gfs/post/jgfs_post_f240
+extern /prod12/gefs/prdgen_low
+extern /prod18/cmcens/jcmc_ens_post_12
+suite test
+  family ens_tracker
+    edit CYC '12'
+#    edit ECF_FILES '/ecf/ecfnets/scripts/ens_tracker'
+    edit MAILTO 'kit.menlove@noaa.gov'
+    edit QUEUE 'preprod2'
+    edit PROJ 'GEN'
+    family gefs
+      task jgfs_tc_track
+        trigger /prod12/gfs/post/jgfs_post_f240 == complete
+      task jgfs_tc_genesis
+        trigger /prod12/gfs/post/jgfs_post_f120 == complete
+      task jgefs_tc_track
+        trigger /prod12/gefs/prdgen_low == complete and ( jgfs_tc_track == active or jgfs_tc_track == complete )
+      task jgefs_tc_genesis
+        trigger /prod12/gefs/prdgen_low == complete and jgfs_tc_genesis == complete
+    endfamily
+    family fens
+      task jnavgem_tc_track
+        time 18:30
+      task jnavgem_tc_genesis
+        time 18:58
+      task jfens_tc_track
+        time 18:45
+      task jfens_tc_genesis
+        time 18:14
+    endfamily
+    family cmce
+      task jcmc_tc_track
+        trigger ../gefs/jgefs_tc_track == complete
+        time 17:16
+      task jcmc_tc_genesis
+        time 17:10
+      task jcens_tc_track
+        trigger /prod18/cmcens/jcmc_ens_post_12 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+      task jcens_tc_genesis
+        trigger /prod18/cmcens/jcmc_ens_post_12 == complete and ( jcmc_tc_track == active or jcmc_tc_track == complete )
+    endfamily
+    family ecme
+      task jecmwf_tc_track
+        time 19:00
+      task jecmwf_tc_genesis
+        time 18:30
+      task jeens_grib
+        time 19:46
+      task jeens_tc_track
+        trigger jeens_grib == complete
+      task jeens_tc_genesis
+        trigger jeens_grib == complete
+    endfamily
+    family ukmet
+      task jukmet_grib
+        time 16:35
+      task jukmet_tc_track
+        trigger jukmet_grib == complete
+      task jukmet_tc_genesis
+        trigger jukmet_grib == complete
+    endfamily
+  endfamily
+endsuite
