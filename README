@@ -1,6 +1,6 @@
 #---  12/13/2024  -------
-This package was built using CMake and is compatible with Hera, Jet, Orion/Hercules, and WCOSS2.
-The version is ens_tracker/v1.4.5.
+This package was built using CMake and is compatible with Hera, Jet, Orion/Hercules, Gaea C6, and WCOSS2.
+This version was cloned from TC_tracker repo on Github and is seperate from ens_tracker.
 
 #---  04/19/2023  -------
 This package could be run on wcoss2, hera, jet, orion.

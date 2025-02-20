@@ -16,12 +16,8 @@
 #%include <head.h> 
 #%include <envir-p2.h>
 
-#export moduleInit=/apps/lmod/lmod/init/ksh
-#. $moduleInit
-
-export clustername=hera
+export target=hera
 module use ../../modulefiles
-#module load ${clustername}.lua
 module load ${clustername}.lua
 module list
 
@@ -30,14 +26,13 @@ export envir=dev
 export cyc=00
 export job=gfs_track_${cyc}
 
-export NWROOT=/scratch2/NCEPDEV/ovp/Hana.Jafary
-export HOMEens_tracker=${NWROOT}/test_fix_cmake
+export PACKAGEROOT=/scratch2/NCEPDEV/ovp/Hana.Jafary
 export DATAROOT=/scratch2/NCEPDEV/ovp/Hana.Jafary/Input
 export COMROOT=${DATAROOT}/com
 export KEEPDATA=YES
 
 # versions file for tracker $tracker.ver
-VERSION_FILE=${NWROOT}/Input/versions/tracker.ver
+VERSION_FILE=${PACKAGEROOT}/tracker_version/version.ver
 if [ -f $VERSION_FILE ]; then
   . $VERSION_FILE
 else
@@ -46,8 +41,7 @@ else
 fi
 
 # CALL executable job script here
-#${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JGFS_TC_TRACK
-${HOMEens_tracker}/jobs/JFV3_CYCLONE_TRACK_JP
+${PACKAGEROOT}/TC_tracker.${TC_tracker_ver}/jobs/JFV3_CYCLONE_TRACK_JP
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

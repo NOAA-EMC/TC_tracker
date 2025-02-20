@@ -8,20 +8,15 @@
 #SBATCH --nodes=1
 #SBATCH --tasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=00:45:00
+#SBATCH --time=01:00:00
 #SBATCH --mem=10g
 #SBATCH -o gfs_tc_genesis.log
 
-##%include <head.h>
-##%include <envir-p2.h>
-
 module reset
-target=gaeac6
+export target=gaeac6
 module use ../../modulefiles
 module load ${target}.lua
 module list
-
-#ulimit -s unlimited
 
 set -x
 export envir=dev
@@ -29,26 +24,25 @@ export cyc=00
 export job=gfs_genesis_${cyc}
 
 export PACKAGEROOT=/gpfs/f6/drsa-hurr1/world-shared/noscrub/Hananeh.Jafary/
-export HOMEens_tracker=${PACKAGEROOT}/fix_cmake
 export DATAROOT=/gpfs/f6/drsa-hurr1/world-shared/noscrub/Hananeh.Jafary
 export COMROOT=${DATAROOT}/com
 export KEEPDATA=YES
 
-# versions file for $tracker.ver
-#VERSION_FILE=/work2/noaa/hurricane/noscrub/hjafary/Input/versions/tracker.ver
-#if [ -f $VERSION_FILE ]; then
-#	  . $VERSION_FILE
-#  else
-#	    ecflow_client --abort
-#	      exit
-#fi
+# versions file for tracker $tracker.ver
+VERSION_FILE=${PACKAGEROOT}/tracker_version/version.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
 
 # CALL executable job script here
-${HOMEens_tracker}/jobs/JFV3_CYCLONE_GENESIS_JP
+${PACKAGEROOT}/TC_tracker.${TC_tracker_ver}/jobs/JFV3_CYCLONE_GENESIS_JP
 
 if [ $? -ne 0 ]; then
-	  ecflow_client --abort
-	    exit
+  ecflow_client --abort
+  exit
 fi
 
 #%include <tail.h>

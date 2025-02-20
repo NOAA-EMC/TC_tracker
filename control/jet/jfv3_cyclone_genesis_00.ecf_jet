@@ -12,34 +12,24 @@
 #SBATCH --mem=10g
 #SBATCH -o gfs_tc_genesis.log
 
-#%include <head.h> 
-#%include <envir-p2.h>
-
-#export moduleInit=/bin/bash
-#. $moduleInit
 
 export clustername=jet
 module use ../../modulefiles
-#module load ${clustername}.lua
 module load ${clustername}.lua
 module list
 
 set -x
-#export WGRIB2=/mnt/lfs3/projects/hfv3gfs/gwv/fv3/exec/wgrib2
-#export NDATE=/mnt/lfs3/projects/hfv3gfs/gwv/fv3/exec/ndate
-
 export envir=dev2
 export cyc=00
 export job=gfs_genesis_${cyc}
 
-export NWROOT=/mnt/lfs5/HFIP/hwrfv3/Hananeh.Jafary
-export HOMEens_tracker=/mnt/lfs5/HFIP/hwrfv3/Hananeh.Jafary/fix_cmake
+export PACKAGEROOT=/mnt/lfs5/HFIP/hwrfv3/Hananeh.Jafary
 export DATAROOT=/mnt/lfs5/HFIP/hwrfv3/Hananeh.Jafary/gfs_data/
-export COMROOT=/mnt/lfs5/HFIP/hwrfv3/Hananeh.Jafary/com
+export COMROOT=${DATAROOT}/com
 export KEEPDATA=YES
 
 # versions file for tracker $tracker.ver
-VERSION_FILE=${NWROOT}/versions/tracker.ver
+VERSION_FILE=${PACKAGEROOT}/tracker_version/version.ver
 if [ -f $VERSION_FILE ]; then
   . $VERSION_FILE
 else
@@ -47,14 +37,13 @@ else
   exit
 fi
 
-# CALL executable job script here
-#${NWROOT}/ens_tracker.${ens_tracker_ver}/jobs/JGFS_TC_TRACK
-${HOMEens_tracker}/jobs/JFV3_CYCLONE_GENESIS_JP
-
 if [ $? -ne 0 ]; then
   ecflow_client --abort
   exit
 fi
+
+# CALL executable job script here
+${PACKAGEROOT}/TC_tracker.${TC_tracker_ver}/jobs/JFV3_CYCLONE_GENESIS_JP
 
 #%include <tail.h> 
 #%manual

@@ -1,5 +1,5 @@
 help([[
-loads hafs_tracker modulefile and related set environment veriables on Hera
+loads TC_tracker modulefile and related set environment veriables on Hera
 ]])
 
 prepend_path("MODULEPATH", "/contrib/sutils/modulefiles")

@@ -1,5 +1,5 @@
 help([[
-loads hafs_tracker modulefile and related set environment veriables on Cactus and Dogwood
+loads TC_tracker modulefile and related set environment veriables on Cactus and Dogwood
 ]])
 
 envvar_ver=os.getenv("envvar_ver") or "1.0"

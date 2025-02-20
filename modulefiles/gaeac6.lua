@@ -1,5 +1,5 @@
 help([[
-loads TC_tracker prerequisites on GAEA C6
+loads TC_tracker modulefile and related set environment veriables on GAEA C6
 ]])
 
 prepend_path("MODULEPATH", "/autofs/ncrc-svm1_proj/epic/spack-stack/spack-stack-1.6.0/envs/unified-env-c6/install/modulefiles/Core")

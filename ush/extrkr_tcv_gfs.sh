@@ -183,7 +183,7 @@ case ${cmodel} in
        gfsgfile=gfs.t${cyc}z.pgrb2.0p25.f                  ;
 
        vit_incr=${FHOUT_CYCLONE:-6}                        ;
-       fcstlen=${FHMAX_CYCLONE:-6}                       ;
+       fcstlen=${FHMAX_CYCLONE:-240}                       ;
        fcsthrs=$(seq -f%03g -s' ' 0 $vit_incr $fcstlen)    ;
 
        model=1                                             ;

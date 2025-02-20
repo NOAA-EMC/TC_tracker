@@ -15,22 +15,29 @@ export model=ens_tracker
 export cyc=00
 export envir=dev
 export job=gfs_avno_${cyc}
+export PACKAGEROOT=/lfs/h2/emc/ens/noscrub/hananeh.jafary
 export COMROOT=/lfs/h2/emc/ptmp/hananeh.jafary/$envir/com
 export DATAROOT=/lfs/h2/emc/ptmp/hananeh.jafary
-export HOMEens_tracker=/lfs/h2/emc/ens/noscrub/hananeh.jafary/test_fix_cmake
 
 module reset
-module use /lfs/h2/emc/ens/noscrub/hananeh.jafary/test_fix_cmake/modulefiles
+module use ../../modulefiles
 module load ${clustername}.lua
 module list
-
 export KEEPDATA=YES
 
-${HOMEens_tracker}/jobs/JGFS_TC_GENESIS
+# versions file for tracker $tracker.ver
+VERSION_FILE=${PACKAGEROOT}/tracker_version/version.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+# CALL executable job script here
+${PACKAGEROOT}/TC_tracker.${TC_tracker_ver}/jobs/JGFS_TC_GENESIS
 
-%include <tail.h>
-
-%manual
+#%include <tail.h>
+#%manual
 
 ######################################################################
 ##PURPOSE:  Executes the job that creates GFS TC genesis forecasts
