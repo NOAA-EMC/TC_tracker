@@ -13,11 +13,6 @@ cd $DATA
 export cycle=t${cyc}z
 
 ####################################
-# File To Log Msgs
-####################################
-#export jlogfile=${jlogfile:-${COMROOT}/logs/jlogfiles/jlogfile.${jobid}}
-
-####################################
 # Specify NET and RUN Name and model
 ####################################
 export NET=${NET:-ens_tracker}
@@ -41,7 +36,7 @@ export SENDDBN=${SENDDBN:-NO}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEens_tracker=${HOMEens_tracker:-${NWROOT:?}}
+export HOMEens_tracker=${HOMEens_tracker:-${PACKAGEROOT:?}/ens_tracker.${ens_tracker_ver}}
 export EXECens_tracker=${EXECens_tracker:-$HOMEens_tracker/exec}
 export FIXens_tracker=${FIXens_tracker:-$HOMEens_tracker/fix}
 export USHens_tracker=${USHens_tracker:-$HOMEens_tracker/ush}
@@ -50,23 +45,18 @@ export SCRIPTens_tracker=${SCRIPTens_tracker:-$HOMEens_tracker/scripts}
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
-#setpdy.sh
-#. PDY
-export PDY=20240923
+setpdy.sh
+. PDY
 
 ##############################################
 # Define COM directories
 ##############################################
 export JYYYY=`echo ${PDY} | cut -c1-4`
-#export COMIN=${COMIN:-${COMROOT:?}/${NET}/${envir}/${RUN}.${PDY}/${cyc}/genesis}
-#export COMINgfs=${COMINgfs:-$(compath.py gfs/prod/gfs.$PDY)}
-export COMINgfs=/gpfs/f6/drsa-hurr1/world-shared/noscrub/Hananeh.Jafary/gfs.${PDY}
-#export COMINsyn=/lfs/h2/emc/hur/noscrub/input/SYNDAT-PLUS
-#export COMINsyn=${COMINsyn:-$(compath.py arch/prod/syndat)}
+export COMIN=${COMIN:-${COMROOT:?}/gfs.${PDY}/00/products/atmos/cyclone/genesis/}
+export COMINgfs=${COMINgfs:-$(/gpfs/f6/drsa-hurr1/world-shared/noscrub/Hananeh.Jafary/gfs.${PDY})}
+export COMINsyn=${COMINsyn:-$(/lfs/h2/emc/hur/noscrub/input/SYNDAT-PLUS)}
 
 export COMOUT=${COMOUT:-${COMROOT:?}/gfs.${PDY}/00/products/atmos/cyclone/genesis/}
-#export COMOUT=${COMOUT:-${COMROOT:?}/${NET}/${envir}/${RUN}.${PDY}/${cyc}/genesis}
-#export COMOUTgenvit=${COMOUTgenvit:-${GESROOT:?}/${envir}/${NET}/genesis_vital_${JYYYY}}
 export COMOUTgenvit=${COMOUTgenvit:-${COMROOT:?}/gfs.${PDY}/00/products/atmos/cyclone/genesis_vital/}
 mkdir -m 775 -p $COMOUT $COMOUTgenvit
 

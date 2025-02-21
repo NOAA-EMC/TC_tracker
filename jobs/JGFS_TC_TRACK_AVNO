@@ -13,11 +13,6 @@ cd $DATA
 export cycle=t${cyc}z
 
 ####################################
-# File To Log Msgs
-####################################
-#export jlogfile=${jlogfile:-${COMROOT}/logs/jlogfiles/jlogfile.${jobid}}
-
-####################################
 # Specify NET and RUN Name and model
 ####################################
 export NET=${NET:-ens_tracker}
@@ -41,7 +36,7 @@ export SENDDBN=${SENDDBN:-NO}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEens_tracker=${HOMEens_tracker:-${NWROOT:?}}
+export HOMEens_tracker=${HOMEens_tracker:-${PACKAGEROOT:?}/ens_tracker.${ens_tracker_ver}}
 export EXECens_tracker=${EXECens_tracker:-$HOMEens_tracker/exec}
 export FIXens_tracker=${FIXens_tracker:-$HOMEens_tracker/fix}
 export USHens_tracker=${USHens_tracker:-$HOMEens_tracker/ush}
@@ -56,11 +51,8 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-#export COMINgfs=/lfs/h2/emc/ens/save/hananeh.jafary/input/gfs.${PDY}
-#export COMINsyn=/lfs/h2/emc/hur/noscrub/input/SYNDAT-PLUS
-
-export COMINgfs=${COMINgfs:-$(compath.py gfs/prod/gfs.$PDY)}
-export COMINsyn=${COMINsyn:-$(compath.py arch/prod/syndat)}
+export COMINgfs=${COMINgfs:-$(/lfs/h2/emc/ens/save/hananeh.jafary/input/gfs.${PDY})}
+export COMINsyn=${COMINsyn:-$(/lfs/h2/emc/hur/noscrub/input/SYNDAT-PLUS)}
 
 export COMOUT=${COMOUT:-${COMROOT:?}/${RUN}.${PDY}/${cyc}/tctrack}
 export COMOUThur=${COMOUThur:-${COMROOT:?}/${NET}/${envir}/global}
