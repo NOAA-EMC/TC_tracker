@@ -24,7 +24,7 @@ while [ $ic -lt $SLEEP_LOOP_MAX ]; do
 
   ic1=0
   for fhour in ${fcsthrs}; do
-    datfile=gfs.t${cyc}z.pgrb2.0p25.f${fhour}
+    datfile=gfs.atmos.t${cyc}z.pres_a.0p25.f${fhour}.grib2
     if [ ! -s ${datdir}/${datfile} ]; then
       set +x
       echo " "

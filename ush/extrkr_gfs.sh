@@ -152,7 +152,7 @@ case ${cmodel} in
        echo " "; set -x                                    ;
 #       gdasdir=${gdasdir:-${COMINgdas:?}/${cyc}}                   ;
        gdasdir=${gdasdir:-${COMINgdas:?}/${cyc}/${COMPONENT}}    ;
-       gdasgfile=gdas.t${cyc}z.pgrb2.0p25.f                 ;
+       gdasgfile=gdas.atmos.t${cyc}z.pres_a.0p25.f                 ;
 
        vit_incr=${FHOUT_CYCLONE:-3}                        ;
        fcstlen=${FHMAX_CYCLONE:-9}                       ;
@@ -208,7 +208,7 @@ case ${cmodel} in
        echo " "; set -x                                    ;
 #       gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}}                     ;
        gfsdir=${gfsdir:-${COMINgfs:?}/${cyc}/${COMPONENT}} ;
-       gfsgfile=gfs.t${cyc}z.pgrb2.0p25.f                  ;
+       gfsgfile=gfs.atmos.t${cyc}z.pres_a.0p25.f           ;
 
        vit_incr=${FHOUT_CYCLONE:-6}                        ;
        fcstlen=${FHMAX_CYCLONE:-240}                       ;
@@ -1168,18 +1168,18 @@ then
     for fhour in ${fcsthrs}
     do
 
-      if [ ! -s ${gdasdir:?}/${gdasgfile}${fhour} ]
+      if [ ! -s ${gdasdir:?}/${gdasgfile}${fhour}.grib2 ]
       then
         set +x
         echo " "
-        echo "FATAL ERROR:  GDAS File missing: ${gdasdir:?}/${gdasgfile}${fhour}"
+        echo "FATAL ERROR:  GDAS File missing: ${gdasdir:?}/${gdasgfile}${fhour}.grib2"
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo " "
         set -x
-        err_exit "MISSING GDAS FILE IN extrkr_gfs.sh: ${gdasdir:?}/${gdasgfile}${fhour}"
+        err_exit "MISSING GDAS FILE IN extrkr_gfs.sh: ${gdasdir:?}/${gdasgfile}${fhour}.grib2"
       fi
 
-      gfile=${gdasdir}/${gdasgfile}${fhour}
+      gfile=${gdasdir}/${gdasgfile}${fhour}.grib2
       ${WGRIB2:?} $gfile -match "$PARMlist" -grib ${TRKDATA}/master.gdasgribfile.${PDY}${cyc}.f${fhour}
 
       gdas_master_file=${TRKDATA}/master.gdasgribfile.${PDY}${cyc}.f${fhour}
@@ -1294,18 +1294,18 @@ then
     for fhour in ${fcsthrs}
     do
   
-      if [ ! -s ${gfsdir:?}/${gfsgfile}${fhour} ]
+      if [ ! -s ${gfsdir:?}/${gfsgfile}${fhour}.grib2 ]
       then
         set +x
         echo " "
-        echo "FATAL ERROR:  GFS File missing: ${gfsdir}/${gfsgfile}${fhour}"
+        echo "FATAL ERROR:  GFS File missing: ${gfsdir}/${gfsgfile}${fhour}.grib2"
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo " "
         set -x
-        err_exit "MISSING GFS FILE IN extrkr_gfs.sh: ${gfsdir}/${gfsgfile}${fhour}"
+        err_exit "MISSING GFS FILE IN extrkr_gfs.sh: ${gfsdir}/${gfsgfile}${fhour}.grib2"
       fi
 
-      gfile=${gfsdir}/${gfsgfile}${fhour}
+      gfile=${gfsdir}/${gfsgfile}${fhour}.grib2
       ${WGRIB2:?} $gfile -match "$PARMlist" -grib ${TRKDATA}/master.gfsgribfile.${PDY}${cyc}.f${fhour}
 
       gfs_master_file=${TRKDATA}/master.gfsgribfile.${PDY}${cyc}.f${fhour}
