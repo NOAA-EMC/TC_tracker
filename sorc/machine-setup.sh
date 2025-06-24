@@ -39,16 +39,11 @@ elif [[ -d /work2/noaa ]]; then
   # We are on MSU Orion or Hercules
   mount=$(findmnt -n -o SOURCE /home)
   if [[ ${mount} =~ "hercules" ]]; then
-    MACHINE_ID=hercules
+    target=hercules
   else
-    MACHINE_ID=orion
+    target=orion
   fi
-    target=orion || hercules
     module purge
-    module use /apps/modulefiles/core
-    module use /apps/contrib/modulefiles
-    module use /apps/contrib/NCEPLIBS/lib/modulefiles
-    module use /apps/contrib/NCEPLIBS/orion/modulefiles
 elif [[ -d /gpfs/f5 ]]; then
   # We are on GAEAC5.
   target=gaeac5
