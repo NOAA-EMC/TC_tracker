@@ -39,10 +39,10 @@ load(pathJoin("hdf5", hdf5_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.5"
+g2_ver=os.getenv("g2_ver") or "3.5.1"
 load(pathJoin("g2", g2_ver))
 
-w3emc_ver=os.getenv("w3emc_ver") or "2.9.1"
+w3emc_ver=os.getenv("w3emc_ver") or "2.12.0"
 load(pathJoin("w3emc", w3emc_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
@@ -64,4 +64,3 @@ setenv("CMAKE_C_COMPILER", "cc")
 setenv("CMAKE_CXX_COMPILER", "CC")
 setenv("CMAKE_Fortran_COMPILER", "ftn")
 setenv("CMAKE_Platform", "wcoss2")
-
