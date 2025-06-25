@@ -47,9 +47,6 @@ load(pathJoin("g2", g2_ver))
 g2tmpl_ver=os.getenv("g2tmpl_ver") or "1.13.0"
 load(pathJoin("g2tmpl", g2tmpl_ver))
 
-w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
-load(pathJoin("w3emc", w3emc_ver))
-
 sigio_ver=os.getenv("sigio_ver") or "2.3.3"
 load(pathJoin("sigio", sigio_ver))
 

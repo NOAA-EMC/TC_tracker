@@ -43,9 +43,6 @@ load(pathJoin("g2", g2_ver))
 g2tmpl_ver=os.getenv("g2tmpl_ver") or "1.13.0"
 load(pathJoin("g2tmpl", g2tmpl_ver))
 
-w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
-load(pathJoin("w3emc", w3emc_ver))
-
 sigio_ver=os.getenv("sigio_ver") or "2.3.3"
 load(pathJoin("sigio", sigio_ver))
 
@@ -58,6 +55,8 @@ load(pathJoin("wgrib2", wgrib2_ver))
 grib_util_ver=os.getenv("grib_util_ver") or "1.4.0"
 load(pathJoin("grib-util", grib_util_ver))
 
+unload("cray-libsci")
+
 setenv("CC", "cc")
 setenv("CXX", "CC")
 setenv("FC", "ftn")
@@ -65,4 +64,3 @@ setenv("CMAKE_C_COMPILER", "cc")
 setenv("CMAKE_CXX_COMPILER", "CC")
 setenv("CMAKE_Fortran_COMPILER", "ftn")
 setenv("CMAKE_Platform", "gaeac6")
-

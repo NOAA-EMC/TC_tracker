@@ -5,7 +5,7 @@
 #=======================================================================
 
 cmake_minimum_required(VERSION 3.15)
-project( 
+project(
   HAFS_TOOLS
   LANGUAGES C Fortran)
 
@@ -28,7 +28,8 @@ find_package(Jasper REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(g2 REQUIRED)
 find_package(bacio REQUIRED)
-find_package(w3emc REQUIRED)
+# w3emc is only needed if using an older g2 library that does not include w3emc functionality.
+find_package(w3emc)
 
 add_subdirectory(sorc/gettrk_gfs.fd)
 add_subdirectory(sorc/ens_trak_ave.fd)
