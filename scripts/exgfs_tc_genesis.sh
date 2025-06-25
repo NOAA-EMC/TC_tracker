@@ -42,7 +42,7 @@ mkdir -p $pertdir
 
 if [[ -d /scratch3 ]] ; then
   # We are on NOAA Hera or Ursa
-  machine=hera
+  machine=ursa
   ${USHens_tracker}/extrkr_tcv_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
 elif [[ -d /work ]] ; then
@@ -102,7 +102,7 @@ mkdir -p $pertdir
 
 if [[ -d /scratch3 ]] ; then
   # We are on NOAA Hera or Ursa
-  machine=hera
+  machine=ursa
   ${USHens_tracker}/extrkr_gen_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
 elif [[ -d /work ]] ; then
