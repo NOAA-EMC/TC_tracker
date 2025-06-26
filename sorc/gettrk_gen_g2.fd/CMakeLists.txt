@@ -39,7 +39,6 @@ IF(DEFINED hwrf_g2_lib)
   target_link_libraries(
   ${exe_name}
   NetCDF::NetCDF_Fortran
-  w3emc::w3emc_d
   bacio::bacio_4
   ${hwrf_g2_lib}
   ${JASPER_LIBRARIES}
@@ -54,5 +53,9 @@ ELSE()
   ${PNG_LIBRARIES})
 ENDIF()
 
+
+if(USE_W3EMC)
+  target_link_libraries(${exe_name} w3emc::w3emc_d)
+endif()
 
 install(TARGETS ${exe_name} DESTINATION ${exec_dir})

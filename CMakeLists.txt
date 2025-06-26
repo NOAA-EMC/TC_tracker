@@ -28,8 +28,13 @@ find_package(Jasper REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(g2 REQUIRED)
 find_package(bacio REQUIRED)
-# w3emc is only needed if using an older g2 library that does not include w3emc functionality.
-find_package(w3emc)
+set (USE_W3EMC FALSE)
+if(NOT g2_VERSION VERSION_GREATER_EQUAL "3.5.0")
+  message(STATUS "g2 version ${g2_VERSION} < 3.5.0, w3emc package is needed")
+  set(USE_W3EMC TRUE)
+endif()
+# Regardless, w3emc is required by g2.
+find_package(w3emc REQUIRED)
 
 add_subdirectory(sorc/gettrk_gfs.fd)
 add_subdirectory(sorc/ens_trak_ave.fd)
