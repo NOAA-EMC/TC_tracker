@@ -27,7 +27,7 @@ cd build
 
 cmake .. -DCMAKE_Fortran_COMPILER=${CMAKE_Fortran_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 
-make -j 8 VERBOSE=2
+make -j ${BUILD_JOBS:-8} VERBOSE=2
 make install
 
 cd ..

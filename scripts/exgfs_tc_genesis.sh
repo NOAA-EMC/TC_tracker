@@ -40,13 +40,13 @@ mkdir -p $pertdir
 
 #outfile=${pertdir}/trkr.${regtype}.${cmodel}.${pert}.${ymdh}.out
 
-if [[ -d /scratch2 ]] ; then
-  # We are on NOAA Hera
-  machine=hera
+if [[ -d /scratch3 ]] ; then
+  # We are on NOAA Hera or Ursa
+  machine=ursa
   ${USHens_tracker}/extrkr_tcv_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
 elif [[ -d /work ]] ; then
-  # We are on MSU Orion
+  # We are on MSU Orion or Hercules
   machine=orion
   ${USHens_tracker}/extrkr_tcv_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
@@ -100,13 +100,13 @@ mkdir -p $pertdir
 
 #outfile=${pertdir}/trkr.${regtype}.${cmodel}.${pert}.${ymdh}.out
 
-if [[ -d /scratch2 ]] ; then
-  # We are on NOAA Hera
-  machine=hera
+if [[ -d /scratch3 ]] ; then
+  # We are on NOAA Hera or Ursa
+  machine=ursa
   ${USHens_tracker}/extrkr_gen_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
 elif [[ -d /work ]] ; then
-  # We are on MSU Orion
+  # We are on MSU Orion or Hercules
   machine=orion
   ${USHens_tracker}/extrkr_gen_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
