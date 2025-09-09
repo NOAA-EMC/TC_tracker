@@ -19,6 +19,19 @@ fi
 target=""
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 
+# Check env var PW_CSP for supported cloud service provider
+if [[ ! -z "${PW_CSP:+x}" ]]; then
+   case "${PW_CSP}" in
+      "aws" | "google" | "azure") 
+        # We are on NOAA cloud
+        target=noaacloud 
+        ;;
+      *) 
+        echo "WARNING: ${PW_CSP} IS UNKNOWN CSP" 1>&2 
+        ;;
+   esac
+fi
+
 if [[ -d /lfs5 ]] ; then
      # We are on NOAA Jet
     if ( ! eval module help > /dev/null 2>&1 ) ; then
