@@ -65,6 +65,19 @@ elif [[ -d /gpfs/f6 ]] ; then
   machine=gaeac6
   ${USHens_tracker}/extrkr_tcv_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
 
+elif [[ ! -z "${PW_CSP:+x}" ]]; then
+   case "${PW_CSP}" in
+      "aws" | "google" | "azure")
+        # We are on NOAA cloud
+	machine=noaacloud
+        ${USHens_tracker}/extrkr_tcv_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
+	;;
+      *)
+        echo Job failed: unknown platform 1>&2
+        err_exit "FAILED ${jobid} - ERROR IN unknown platform - ABNORMAL EXIT"
+        ;;
+   esac
+
 else
   export machine=unknown
   echo Job failed: unknown platform 1>&2
@@ -124,6 +137,19 @@ elif [[ -d /gpfs/f6 ]] ; then
   # We are on NOAA gaeac6
   machine=gaeac6
   ${USHens_tracker}/extrkr_gen_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
+
+elif [[ ! -z "${PW_CSP:+x}" ]]; then
+   case "${PW_CSP}" in
+      "aws" | "google" | "azure")
+        # We are on NOAA cloud
+        machine=noaacloud
+        ${USHens_tracker}/extrkr_gen_gfs.sh ${loopnum} ${cmodel} ${pert} ${pertdir} #2>&1 >${outfile}
+	;;
+      *)
+        echo Job failed: unknown platform 1>&2
+        err_exit "FAILED ${jobid} - ERROR IN unknown platform - ABNORMAL EXIT"
+        ;;
+   esac
 
 else
   export machine=unknown
